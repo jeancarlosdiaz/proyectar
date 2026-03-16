@@ -37,7 +37,7 @@ const Dashboard = () => {
             <div className="card-body">
               <h6 className="text-muted small text-uppercase fw-bold">Ambulancias</h6>
               <div className="d-flex align-items-center">
-                <h2 className="mb-0 fw-bold">{data.total_ambulancias}</h2>
+                <h2 className="mb-0 fw-bold">{data?.total_ambulancias || 0}</h2>
                 <i className="bi bi-truck ms-auto fs-1 text-primary-institucional opacity-25"></i>
               </div>
             </div>
@@ -48,7 +48,7 @@ const Dashboard = () => {
             <div className="card-body">
               <h6 className="text-muted small text-uppercase fw-bold">Equipos Médicos</h6>
               <div className="d-flex align-items-center">
-                <h2 className="mb-0 fw-bold">{data.total_equipos}</h2>
+                <h2 className="mb-0 fw-bold">{data?.total_equipos || 0}</h2>
                 <i className="bi bi-tools ms-auto fs-1 text-info opacity-25"></i>
               </div>
             </div>
@@ -59,7 +59,7 @@ const Dashboard = () => {
             <div className="card-body">
               <h6 className="text-muted small text-uppercase fw-bold">SOAT Vencidos</h6>
               <div className="d-flex align-items-center">
-                <h2 className="mb-0 fw-bold text-danger">{data.documentos_vencidos.soat}</h2>
+                <h2 className="mb-0 fw-bold text-danger">{data?.documentos_vencidos?.soat || 0}</h2>
                 <i className="bi bi-file-earmark-pdf ms-auto fs-1 text-danger opacity-25"></i>
               </div>
             </div>
@@ -70,7 +70,7 @@ const Dashboard = () => {
             <div className="card-body">
               <h6 className="text-muted small text-uppercase fw-bold">Tecno Vencidos</h6>
               <div className="d-flex align-items-center">
-                <h2 className="mb-0 fw-bold text-warning">{data.documentos_vencidos.tecno}</h2>
+                <h2 className="mb-0 fw-bold text-warning">{data?.documentos_vencidos?.tecno || 0}</h2>
                 <i className="bi bi-shield-exclamation ms-auto fs-1 text-warning opacity-25"></i>
               </div>
             </div>
@@ -87,10 +87,10 @@ const Dashboard = () => {
             </div>
             <div className="card-body p-0">
               <div className="list-group list-group-flush">
-                {data.calibraciones_alertas.length === 0 ? (
+                {data?.calibraciones_alertas?.length === 0 ? (
                   <div className="p-4 text-center text-muted">Todos los equipos están al día con sus calibraciones.</div>
                 ) : (
-                  data.calibraciones_alertas.map(calib => (
+                  data?.calibraciones_alertas?.map(calib => (
                     <div 
                       key={calib.id} 
                       className="list-group-item list-group-item-action p-3 border-bottom cursor-pointer" 
@@ -138,10 +138,10 @@ const Dashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.calibraciones_vencidas.length === 0 ? (
+                    {data?.calibraciones_vencidas?.length === 0 ? (
                       <tr><td colSpan="4" className="text-center py-4 text-muted">No hay calibraciones vencidas.</td></tr>
                     ) : (
-                      data.calibraciones_vencidas.map(m => {
+                      data?.calibraciones_vencidas?.map(m => {
                         const getStatusBadge = (fecha) => {
                           const hoy = new Date();
                           const venc = new Date(fecha);

@@ -59,9 +59,6 @@ $stmt_alertas = $conn->prepare($query_alertas);
 $stmt_alertas->execute();
 $summary["calibraciones_alertas"] = $stmt_alertas->fetchAll(PDO::FETCH_ASSOC);
 
-http_response_code(200);
-echo json_encode($summary);
-
-http_response_code(200);
 echo json_encode($summary);
 ?>
+
