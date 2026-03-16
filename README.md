@@ -20,7 +20,7 @@ Sistema integral para la gestión de ambulancias, equipos médicos, personal y s
 
 ### ⚖️ Control de Calibraciones
 - Programación periódica de calibraciones por equipo.
-- Cálculo automático de próximas fechas de mantenimiento.
+- Cálculo automático de próximas fechas de calibración.
 - Historial con certificados adjuntables (PDF) por calibración.
 - Dashboard con alertas de calibraciones vencidas o por vencer.
 
