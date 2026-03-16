@@ -122,3 +122,16 @@ CREATE TABLE IF NOT EXISTS auditoria (
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
+
+-- 7. Tabla de Historial de Mantenimientos
+CREATE TABLE IF NOT EXISTS mantenimientos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    equipo_id INT NOT NULL,
+    fecha_mantenimiento DATE NOT NULL,
+    tipo ENUM('preventivo', 'correctivo') NOT NULL,
+    observaciones TEXT,
+    soporte_pdf VARCHAR(255) DEFAULT NULL,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (equipo_id) REFERENCES equipos_medicos(id) ON DELETE CASCADE
+);
+

@@ -8,14 +8,23 @@ const EquipoHojaVidaV2 = () => {
     const navigate = useNavigate();
     const [detalle, setDetalle] = useState(null);
     const [calibraciones, setCalibraciones] = useState([]);
+    const [mantenimientos, setMantenimientos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [formCalibracion, setFormCalibracion] = useState(false);
+    const [formMantenimiento, setFormMantenimiento] = useState(false);
     const [calibData, setCalibData] = useState({
         fecha_calibracion: new Date().toISOString().split('T')[0],
         periodicidad_meses: 6,
         observaciones: '',
         documento_pdf: ''
     });
+    const [mantData, setMantData] = useState({
+        fecha_mantenimiento: new Date().toISOString().split('T')[0],
+        tipo: 'preventivo',
+        observaciones: '',
+        soporte_pdf: ''
+    });
+    const [showFilePickerMant, setShowFilePickerMant] = useState(false);
 
     // Estados para el selector de archivos
     const [showFilePicker, setShowFilePicker] = useState(false);
@@ -26,6 +35,15 @@ const EquipoHojaVidaV2 = () => {
             setCalibraciones(Array.isArray(resCal.data) ? resCal.data : []);
         } catch (error) {
             console.error("Error cargando calibraciones", error);
+        }
+    };
+
+    const fetchMantenimientos = async () => {
+        try {
+            const res = await axios.get(`http://localhost/proyectar/api/mantenimientos/read.php?equipo_id=${id}`, { withCredentials: true });
+            setMantenimientos(Array.isArray(res.data) ? res.data : []);
+        } catch (error) {
+            console.error("Error cargando mantenimientos", error);
         }
     };
 
@@ -42,8 +60,9 @@ const EquipoHojaVidaV2 = () => {
                     setCalibData(prev => ({ ...prev, periodicidad_meses: resEq.data.periodicidad_meses }));
                 }
 
-                // Obtener calibraciones
+                // Obtener calibraciones y mantenimientos
                 await fetchCalibraciones();
+                await fetchMantenimientos();
             } catch (error) {
                 console.error("Error cargando hoja de vida", error);
             } finally {
@@ -90,6 +109,37 @@ const EquipoHojaVidaV2 = () => {
             alert('Error eliminando calibración: ' + (error.response?.data?.message || error.message));
         }
     };
+
+    const handleMantSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.post('http://localhost/proyectar/api/mantenimientos/create.php', {
+                equipo_id: id,
+                ...mantData
+            }, { withCredentials: true });
+            setFormMantenimiento(false);
+            setMantData({
+                fecha_mantenimiento: new Date().toISOString().split('T')[0],
+                tipo: 'preventivo',
+                observaciones: '',
+                soporte_pdf: ''
+            });
+            fetchMantenimientos();
+        } catch (error) {
+            alert('Error registrando mantenimiento');
+        }
+    };
+
+    const handleDeleteMant = async (mantId) => {
+        if (!window.confirm('¿Estás seguro de eliminar este registro de mantenimiento? Esta acción no se puede deshacer.')) return;
+        try {
+            await axios.post('http://localhost/proyectar/api/mantenimientos/delete.php', { id: mantId }, { withCredentials: true });
+            fetchMantenimientos();
+        } catch (error) {
+            alert('Error eliminando mantenimiento: ' + (error.response?.data?.message || error.message));
+        }
+    };
+
 
     if (loading) return <div className="text-center mt-5"><div className="spinner-border text-primary-institucional"></div><p className="mt-2 text-muted">Cargando Hoja de Vida...</p></div>;
     if (!detalle) return <div className="alert alert-warning m-4">No se encontró información para este equipo.</div>;
@@ -191,9 +241,10 @@ const EquipoHojaVidaV2 = () => {
                     </div>
                 </div>
 
-                {/* Columna Derecha: Historial de Calibraciones */}
+                {/* Columna Derecha: Historial de Calibraciones + Mantenimientos */}
                 <div className="col-lg-8">
-                    <div className="card border-0 shadow-sm h-100">
+                    <div className="d-flex flex-column gap-4">
+                    <div className="card border-0 shadow-sm">
                         <div className="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                             <h5 className="mb-0 fw-bold text-success">
                                 <i className="bi bi-wrench-adjustable me-2"></i> Historial de Calibraciones
@@ -304,16 +355,129 @@ const EquipoHojaVidaV2 = () => {
                             </div>
                         </div>
                     </div>
+
+                    {/* Historial de Mantenimientos */}
+                    <div className="card border-0 shadow-sm">
+                        <div className="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                            <h5 className="mb-0 fw-bold text-warning">
+                                <i className="bi bi-tools me-2"></i> Historial de Mantenimientos
+                            </h5>
+                            <button className="btn btn-sm btn-warning shadow-sm px-3 text-dark" onClick={() => setFormMantenimiento(!formMantenimiento)}>
+                                {formMantenimiento ? <><i className="bi bi-x-lg me-1"></i> Cerrar</> : <><i className="bi bi-plus-lg me-1"></i> Registrar Mantenimiento</>}
+                            </button>
+                        </div>
+
+                        {formMantenimiento && (
+                            <div className="card-body border-bottom bg-light animate__animated animate__fadeInDown">
+                                <form onSubmit={handleMantSubmit} className="row g-3 align-items-end">
+                                    <div className="col-md-2">
+                                        <label className="form-label small fw-bold">Fecha Realizada</label>
+                                        <input type="date" className="form-control" value={mantData.fecha_mantenimiento} onChange={e => setMantData({ ...mantData, fecha_mantenimiento: e.target.value })} required />
+                                    </div>
+                                    <div className="col-md-2">
+                                        <label className="form-label small fw-bold">Tipo</label>
+                                        <select className="form-select" value={mantData.tipo} onChange={e => setMantData({ ...mantData, tipo: e.target.value })} required>
+                                            <option value="preventivo">Preventivo</option>
+                                            <option value="correctivo">Correctivo</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <label className="form-label small fw-bold">Observaciones</label>
+                                        <input type="text" className="form-control" value={mantData.observaciones} onChange={e => setMantData({ ...mantData, observaciones: e.target.value })} placeholder="Ej: Cambio de piezas, revisión general..." />
+                                    </div>
+                                    <div className="col-md-4">
+                                        <label className="form-label small fw-bold d-block">Soporte (PDF)</label>
+                                        <button className={`btn ${mantData.soporte_pdf ? 'btn-success' : 'btn-outline-secondary'} w-100 text-truncate`} type="button" onClick={() => setShowFilePickerMant(true)}>
+                                            <i className={`bi ${mantData.soporte_pdf ? 'bi-check-circle-fill' : 'bi-file-earmark-pdf'} me-2`}></i>
+                                            {mantData.soporte_pdf ? mantData.soporte_pdf.split('/').pop() : 'Adjuntar Soporte'}
+                                        </button>
+                                    </div>
+                                    <div className="col-12 text-end pt-2">
+                                        <button type="submit" className="btn btn-warning px-4 text-dark fw-bold">
+                                            Guardar Mantenimiento
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        )}
+
+                        <div className="card-body p-0">
+                            <div className="table-responsive">
+                                <table className="table table-hover mb-0 align-middle">
+                                    <thead className="table-light">
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Tipo</th>
+                                            <th>Observaciones</th>
+                                            <th>Soporte</th>
+                                            {isAdmin && <th className="text-end">Acciones</th>}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {mantenimientos.length === 0 ? (
+                                            <tr><td colSpan={isAdmin ? 5 : 4} className="text-center py-5 text-muted fst-italic">No hay mantenimientos registrados aún.</td></tr>
+                                        ) : (
+                                            mantenimientos.map(mant => (
+                                                <tr key={mant.id}>
+                                                    <td className="fw-bold">{mant.fecha_mantenimiento}</td>
+                                                    <td>
+                                                        <span className={`badge py-2 px-3 ${mant.tipo === 'correctivo' ? 'bg-danger' : 'bg-success'}`}>
+                                                            <i className={`bi ${mant.tipo === 'correctivo' ? 'bi-exclamation-triangle-fill' : 'bi-shield-check'} me-1`}></i>
+                                                            {mant.tipo.charAt(0).toUpperCase() + mant.tipo.slice(1)}
+                                                        </span>
+                                                    </td>
+                                                    <td><div className="small">{mant.observaciones || <span className="text-muted fst-italic">Sin observaciones</span>}</div></td>
+                                                    <td>
+                                                        {mant.soporte_pdf ? (
+                                                            <a href={`http://localhost/proyectar/${mant.soporte_pdf}`} target="_blank" rel="noreferrer" className="btn btn-xs btn-outline-danger shadow-sm">
+                                                                <i className="bi bi-file-earmark-pdf me-1"></i> PDF
+                                                            </a>
+                                                        ) : (
+                                                            <span className="text-muted small">Sin adjunto</span>
+                                                        )}
+                                                    </td>
+                                                    {isAdmin && (
+                                                        <td className="text-end">
+                                                            <button className="btn btn-sm btn-outline-danger" onClick={() => handleDeleteMant(mant.id)} title="Eliminar Registro">
+                                                                <i className="bi bi-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    )}
+                                                </tr>
+                                            ))
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    </div>{/* fin d-flex flex-column */}
                 </div>
             </div>
+
+
+            <FilePickerModal
+                show={showFilePickerMant}
+                onHide={() => setShowFilePickerMant(false)}
+                multiple={false}
+                selectedPaths={mantData.soporte_pdf}
+                onSelect={(archivo) => {
+                    setMantData({ ...mantData, soporte_pdf: `uploads/${archivo.nombre_servidor}` });
+                    setShowFilePickerMant(false);
+                }}
+                title="Seleccionar Soporte de Mantenimiento"
+            />
 
             <FilePickerModal
                 show={showFilePicker}
                 onHide={() => setShowFilePicker(false)}
                 multiple={false}
                 selectedPaths={calibData.documento_pdf}
-                onFileSelected={(path) => setCalibData({ ...calibData, documento_pdf: path })}
-                onClose={() => setShowFilePicker(false)}
+                onSelect={(archivo) => {
+                    setCalibData({ ...calibData, documento_pdf: `uploads/${archivo.nombre_servidor}` });
+                    setShowFilePicker(false);
+                }}
                 title="Seleccionar Certificado de Calibración"
             />
         </div>
