@@ -34,6 +34,7 @@ const Layout = () => {
     { path: '/archivos', label: 'Multimedia', icon: 'bi-images', id: 'multimedia' },
     { path: '/sedes', label: 'Sedes', icon: 'bi-geo-alt', id: 'sedes' },
     { path: '/tipos-equipos', label: 'Tipos de Equipos', icon: 'bi-tags', id: 'tipos_equipos' },
+    { path: '/informe-formulario', label: 'Informe Externo', icon: 'bi-file-earmark-spreadsheet', id: 'informe_externo' },
 
     ...(user?.rol === 'admin' ? [
         { path: '/usuarios', label: 'Usuarios', icon: 'bi-person-gear', id: 'usuarios' },

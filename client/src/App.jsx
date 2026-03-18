@@ -14,6 +14,7 @@ import TiposEquipos from './pages/TiposEquipos';
 import Usuarios from './pages/Usuarios';
 import AmbulanciaDetalleV2 from './pages/AmbulanciaDetalleV2';
 import EquipoHojaVidaV2 from './pages/EquipoHojaVidaV2';
+import InformeFormulario from './pages/InformeFormulario';
 
 
 
@@ -37,6 +38,7 @@ function App() {
           <Route path="/usuarios" element={<Usuarios />} />
           <Route path="/ambulancia-detalle/:id" element={<AmbulanciaDetalleV2 />} />
           <Route path="/equipo-hoja-vida/:id" element={<EquipoHojaVidaV2 />} />
+          <Route path="/informe-formulario" element={<InformeFormulario />} />
         </Route>
 
 
