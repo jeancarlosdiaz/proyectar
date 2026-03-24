@@ -506,6 +506,22 @@ const InformeFormulario = () => {
       sheet.mergeCells('A94:G94'); sheet.mergeCells('Q94:AF94');
       sheet.mergeCells('A95:G95'); sheet.mergeCells('Q95:AF95');
 
+      // Bordes externos para A91:AG96
+      for (let r = 91; r <= 96; r++) {
+        for (let c = 1; c <= 33; c++) {
+          const cell = sheet.getRow(r).getCell(c);
+          let newBorder = { ...(cell.border || {}) };
+          
+          if (r === 91) newBorder.top = { style: 'thin' };
+          if (r === 96) newBorder.bottom = { style: 'thin' };
+          if (c === 1) newBorder.left = { style: 'thin' };
+          if (c === 33) newBorder.right = { style: 'thin' };
+          
+          if (r === 91 || r === 96 || c === 1 || c === 33) {
+            cell.border = newBorder;
+          }
+        }
+      }
 
       // Insertar Imagen si se proporcionó Base64
       if (logoBase64 && logoBase64.startsWith("data:image")) {
