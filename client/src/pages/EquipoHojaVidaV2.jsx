@@ -163,7 +163,7 @@ const EquipoHojaVidaV2 = () => {
                         <div className="card-header bg-primary-institucional text-white d-flex align-items-center gap-3 py-3">
                             {detalle.imagen_url && (
                                 <div style={{ width: '60px', height: '60px', borderRadius: '8px', overflow: 'hidden', border: '2px solid white' }} className="shadow-sm">
-                                    <img src={`http://localhost/proyectar/${detalle.imagen_url}`} className="w-100 h-100" style={{ objectFit: 'cover' }} alt="Equipo" />
+                                    <img src={`${config.baseUrl}/${detalle.imagen_url}`} className="w-100 h-100" style={{ objectFit: 'cover' }} alt="Equipo" />
                                 </div>
                             )}
                             <div>
@@ -205,7 +205,7 @@ const EquipoHojaVidaV2 = () => {
                             <h6 className="fw-bold mb-3 border-bottom pb-2 text-primary-institucional">Documentación Técnica</h6>
                             <div className="d-grid gap-2">
                                 {detalle.hoja_vida_pdf ? detalle.hoja_vida_pdf.split(';').map((path, idx) => (
-                                    <a key={idx} href={`http://localhost/proyectar/${path}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-danger text-start text-truncate">
+                                    <a key={idx} href={`${config.baseUrl}/${path}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-danger text-start text-truncate">
                                         <i className="bi bi-file-person me-2"></i> Hoja de Vida {idx + 1}
                                     </a>
                                 )) : <div className="small text-muted mb-2 ps-1">Hoja de Vida no disponible</div>}
@@ -215,25 +215,25 @@ const EquipoHojaVidaV2 = () => {
                                         <i className="bi bi-link-45deg me-2"></i> Guía de Uso (Enlace)
                                     </a>
                                 ) : detalle.guia_uso_tipo === 'documento' && detalle.guia_uso_pdf ? detalle.guia_uso_pdf.split(';').map((path, idx) => (
-                                    <a key={idx} href={`http://localhost/proyectar/${path}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-danger text-start text-truncate">
+                                    <a key={idx} href={`${config.baseUrl}/${path}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-danger text-start text-truncate">
                                         <i className="bi bi-file-earmark-play me-2"></i> Guía de Uso {idx + 1}
                                     </a>
                                 )) : <div className="small text-muted mb-2 ps-1">Guía de Uso no disponible</div>}
 
                                 {detalle.manual_pdf ? detalle.manual_pdf.split(';').map((path, idx) => (
-                                    <a key={idx} href={`http://localhost/proyectar/${path}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-danger text-start text-truncate">
+                                    <a key={idx} href={`${config.baseUrl}/${path}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-danger text-start text-truncate">
                                         <i className="bi bi-file-earmark-pdf me-2"></i> Manual de Usuario {idx + 1}
                                     </a>
                                 )) : <div className="small text-muted mb-2 ps-1">Manual no disponible</div>}
 
                                 {detalle.invima_pdf ? detalle.invima_pdf.split(';').map((path, idx) => (
-                                    <a key={idx} href={`http://localhost/proyectar/${path}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-danger text-start text-truncate">
+                                    <a key={idx} href={`${config.baseUrl}/${path}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-danger text-start text-truncate">
                                         <i className="bi bi-shield-check me-2"></i> Registro INVIMA {idx + 1}
                                     </a>
                                 )) : <div className="small text-muted mb-2 ps-1">INVIMA no disponible</div>}
 
                                 {detalle.protocolos_pdf ? detalle.protocolos_pdf.split(';').map((path, idx) => (
-                                    <a key={idx} href={`http://localhost/proyectar/${path}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-danger text-start text-truncate">
+                                    <a key={idx} href={`${config.baseUrl}/${path}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-danger text-start text-truncate">
                                         <i className="bi bi-droplet me-2"></i> Protocolo Limpieza {idx + 1}
                                     </a>
                                 )) : <div className="small text-muted ps-1">Protocolos no disponibles</div>}
@@ -325,7 +325,7 @@ const EquipoHojaVidaV2 = () => {
                                                         </td>
                                                         <td>
                                                             {calib.documento_pdf ? (
-                                                                <a href={`http://localhost/proyectar/${calib.documento_pdf}`} target="_blank" rel="noreferrer" className="btn btn-xs btn-outline-danger shadow-sm">
+                                                                <a href={`${config.baseUrl}/${calib.documento_pdf}`} target="_blank" rel="noreferrer" className="btn btn-xs btn-outline-danger shadow-sm">
                                                                     <i className="bi bi-file-earmark-pdf me-1"></i> PDF
                                                                 </a>
                                                             ) : (
@@ -430,7 +430,7 @@ const EquipoHojaVidaV2 = () => {
                                                     <td><div className="small">{mant.observaciones || <span className="text-muted fst-italic">Sin observaciones</span>}</div></td>
                                                     <td>
                                                         {mant.soporte_pdf ? (
-                                                            <a href={`http://localhost/proyectar/${mant.soporte_pdf}`} target="_blank" rel="noreferrer" className="btn btn-xs btn-outline-danger shadow-sm">
+                                                            <a href={`${config.baseUrl}/${mant.soporte_pdf}`} target="_blank" rel="noreferrer" className="btn btn-xs btn-outline-danger shadow-sm">
                                                                 <i className="bi bi-file-earmark-pdf me-1"></i> PDF
                                                             </a>
                                                         ) : (

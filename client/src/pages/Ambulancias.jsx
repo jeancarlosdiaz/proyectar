@@ -290,7 +290,7 @@ const Ambulancias = () => {
                              </div>
                              <div className="d-flex flex-wrap gap-1" style={{maxWidth: '80px'}}>
                                 {amb.soat_pdf && amb.soat_pdf.split(';').map((path, idx) => (
-                                    <a key={idx} href={`http://localhost/proyectar/${path}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-danger p-1" title={`Ver SOAT ${idx + 1}`}>
+                                    <a key={idx} href={`${config.baseUrl}/${path}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-danger p-1" title={`Ver SOAT ${idx + 1}`}>
                                         <i className="bi bi-file-earmark-pdf"></i>
                                     </a>
                                 ))}
@@ -304,7 +304,7 @@ const Ambulancias = () => {
                              </div>
                              <div className="d-flex flex-wrap gap-1" style={{maxWidth: '80px'}}>
                                 {amb.tecnomecanica_pdf && amb.tecnomecanica_pdf.split(';').map((path, idx) => (
-                                    <a key={idx} href={`http://localhost/proyectar/${path}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-danger p-1" title={`Ver Tecno ${idx + 1}`}>
+                                    <a key={idx} href={`${config.baseUrl}/${path}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-danger p-1" title={`Ver Tecno ${idx + 1}`}>
                                         <i className="bi bi-file-earmark-pdf"></i>
                                     </a>
                                 ))}

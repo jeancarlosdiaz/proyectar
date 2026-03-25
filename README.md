@@ -129,12 +129,15 @@ header("Access-Control-Allow-Origin: http://localhost:5173");
 ```
 
 ### 4. Inicialización del Frontend
+Asegúrate de que tus variables de entorno en `client/src/config.js` estén configuradas para **DESARROLLO LOCAL** antes de iniciar:
 ```bash
 cd client
 npm install
 npm run dev
 ```
 Accede a `http://localhost:5173` para comenzar.
+
+> **💡 Nota sobre Producción:** Consulta la [GUIA_DESPLIEGUE.md](./GUIA_DESPLIEGUE.md) para ver los pasos detallados de compilación y subida al servidor.
 
 ---
 

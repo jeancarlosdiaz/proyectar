@@ -30,8 +30,13 @@ En tu entorno local, antes de subir el frontend, necesitas decirle que ahora apu
 1. Abre el archivo `client/src/config.js` y asegúrate de que esté configurado para producción, comentando la URL local y descomentando la de producción:
    ```javascript
    const config = {
-       // apiUrl: 'http://localhost/proyectar/api',
+       // ---- DESARROLLO LOCAL ----
+       //apiUrl: 'http://localhost/proyectar/api',
+       //baseUrl: 'http://localhost/proyectar',
+
+       // ---- PRODUCCIÓN ----
        apiUrl: 'https://ambulanciasproyectar.com/proyectar/api',
+       baseUrl: 'https://ambulanciasproyectar.com/proyectar',
    };
    export default config;
    ```
@@ -55,6 +60,7 @@ En tu entorno local, antes de subir el frontend, necesitas decirle que ahora apu
    └── proyectar/           <-- https://ambulanciasproyectar.com/proyectar
        ├── api/             <-- (nuestros scripts PHP)
        ├── assets/          <-- (archivos creados por React)
+       ├── uploads/         <-- (carpeta de imágenes y PDFs, asegúrate de mantenerla aquí)
        ├── index.html       <-- (archivo creado por React)
        └── ... (otros archivos .js, .css, etc.)
    ```

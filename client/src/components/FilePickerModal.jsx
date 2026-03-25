@@ -132,7 +132,7 @@ const FilePickerModal = ({ show, onHide, onSelect, title = "Seleccionar Archivo"
                             </td>
                             <td className="text-end">
                               <div className="d-flex justify-content-end gap-1">
-                                <a href={`http://localhost/proyectar/uploads/${a.nombre_servidor}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-info" onClick={(e) => e.stopPropagation()}>
+                                <a href={`${config.baseUrl}/uploads/${a.nombre_servidor}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-info" onClick={(e) => e.stopPropagation()}>
                                   <i className="bi bi-eye"></i> Ver
                                 </a>
                                 {!multiple && (

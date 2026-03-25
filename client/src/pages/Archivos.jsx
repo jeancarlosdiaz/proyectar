@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import config from '../config';
@@ -168,7 +168,7 @@ const Archivos = () => {
                                             <td>{new Date(archivo.creado_en).toLocaleString()}</td>
                                             <td className="text-end pe-4">
                                                 <a 
-                                                    href={`http://localhost/proyectar/uploads/${archivo.nombre_servidor}`} 
+                                                    href={`${config.baseUrl}/uploads/${archivo.nombre_servidor}`} 
                                                     target="_blank" 
                                                     rel="noopener noreferrer" 
                                                     className="btn btn-sm btn-outline-primary me-2"

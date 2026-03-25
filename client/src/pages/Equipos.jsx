@@ -247,7 +247,7 @@ const Equipos = () => {
                     {equipoActual.imagen_url ? (
                         <>
                             <img 
-                                src={`http://localhost/proyectar/${equipoActual.imagen_url}`} 
+                                src={`${config.baseUrl}/${equipoActual.imagen_url}`} 
                                 alt="Perfil" 
                                 className="w-100 h-100" 
                                 style={{ objectFit: 'cover' }} 

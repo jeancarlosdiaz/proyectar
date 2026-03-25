@@ -234,7 +234,7 @@ const AmbulanciaDetalleV2 = () => {
                                         <h6 className="fw-bold mb-3 border-bottom pb-2">Seguro SOAT</h6>
                                         <div className="d-flex flex-wrap gap-2">
                                             {info.soat_pdf ? info.soat_pdf.split(';').map((path, idx) => (
-                                                <a key={idx} href={`http://localhost/proyectar/${path}`} target="_blank" rel="noreferrer" className="btn btn-outline-danger btn-sm d-flex align-items-center gap-2">
+                                                <a key={idx} href={`${config.baseUrl}/${path}`} target="_blank" rel="noreferrer" className="btn btn-outline-danger btn-sm d-flex align-items-center gap-2">
                                                     <i className="bi bi-file-earmark-pdf fs-5"></i>
                                                     <span className="fw-bold">Ver SOAT {idx + 1}</span>
                                                 </a>
@@ -247,7 +247,7 @@ const AmbulanciaDetalleV2 = () => {
                                         <h6 className="fw-bold mb-3 border-bottom pb-2">Revisiones Tecnomecánicas</h6>
                                         <div className="d-flex flex-wrap gap-2">
                                             {info.tecnomecanica_pdf ? info.tecnomecanica_pdf.split(';').map((path, idx) => (
-                                                <a key={idx} href={`http://localhost/proyectar/${path}`} target="_blank" rel="noreferrer" className="btn btn-outline-danger btn-sm d-flex align-items-center gap-2">
+                                                <a key={idx} href={`${config.baseUrl}/${path}`} target="_blank" rel="noreferrer" className="btn btn-outline-danger btn-sm d-flex align-items-center gap-2">
                                                     <i className="bi bi-file-earmark-pdf fs-5"></i>
                                                     <span className="fw-bold">Ver Revisión {idx + 1}</span>
                                                 </a>
