@@ -128,6 +128,8 @@ const InformeFormulario = () => {
 
       // --- INFORMACIÓN ADMINISTRATIVA DESDE EL ÚLTIMO REGISTRO (MÁS RECIENTE) ---
       const ultimoReg = sheetRows[sheetRows.length - 1] || {};
+      const polizaIndividualVigente = ultimoReg["POLIZA INDIVIDUAL VIGENTE"] || "-";
+      const polizaIndivdualVenc = ultimoReg["FECHA DE VENCIMIENTO DE LA POLIZA INDIVIDUAL"] || "-";
       const soatVigente = ultimoReg["SOAT VIGENTE"] || "-";
       const soatVenc = ultimoReg["FECHA DE VENCIMIENTO DEL SOAT"] || "-";
       const tecnoVigente = ultimoReg["TECNOMECANICA VIGENTE"] || "-";
@@ -355,17 +357,19 @@ const InformeFormulario = () => {
         sheet.addRow(rowValues);
       });
 
+      const polizaIndivFecha = parseDateString(polizaIndivdualVenc);
       const soatFecha = parseDateString(soatVenc);
       const tecnoFecha = parseDateString(tecnoVenc);
 
-      const fe4 = Array(33).fill(""); fe4[0] = "DATOS DEL VEHICULO";
+      const datosVehiculo = Array(33).fill(""); datosVehiculo[0] = "DATOS DEL VEHICULO";
+      const fe4 = Array(33).fill(""); fe4[0] = "POLIZA INDIVIDUAL"; fe4[2] = "SI"; fe4[3] = (polizaIndividualVigente == "SI" ? "✔️" : ""); fe4[4] = "NO"; fe4[5] = (polizaIndividualVigente == "NO" ? "✔️" : ""); fe4[6] = "FECHA DE VENCIMIENTO"; fe4[15] = "DIA"; fe4[18] = polizaIndivFecha.d; fe4[21] = "MES"; fe4[24] = polizaIndivFecha.m; fe4[27] = "AÑO"; fe4[30] = polizaIndivFecha.y;
       const fe5 = Array(33).fill(""); fe5[0] = "SOAT"; fe5[2] = "SI"; fe5[3] = (soatVigente == "SI" ? "✔️" : ""); fe5[4] = "NO"; fe5[5] = (soatVigente == "NO" ? "✔️" : ""); fe5[6] = "FECHA DE VENCIMIENTO"; fe5[15] = "DIA"; fe5[18] = soatFecha.d; fe5[21] = "MES"; fe5[24] = soatFecha.m; fe5[27] = "AÑO"; fe5[30] = soatFecha.y;
       const fe6 = Array(33).fill(""); fe6[0] = "TECNOMECANICA"; fe6[2] = "SI"; fe6[3] = (tecnoVigente == "SI" ? "✔️" : ""); fe6[4] = "NO"; fe6[5] = (tecnoVigente == "NO" ? "✔️" : ""); fe6[6] = "FECHA DE VENCIMIENTO"; fe6[15] = "DIA"; fe6[18] = tecnoFecha.d; fe6[21] = "MES"; fe6[24] = tecnoFecha.m; fe6[27] = "AÑO"; fe6[30] = tecnoFecha.y;
       const fe7 = Array(33).fill(""); fe7[0] = "KILOMETRAJE ACTUAL"; fe7[4] = kmInicial; fe7[9] = "KILOMETRAJE PARA PROXIMO CAMBIO DE VALVULINA DE CAJA"; fe7[27] = kmCaja;
       const fe8 = Array(33).fill(""); fe8[0] = "KILOMETRAJE PARA PROXIMO CAMBIO DE ACEITE"; fe8[4] = kmAceite; fe8[9] = "KILOMETRAJE PARA PROXIMO CAMBIO DE VALVULINA DE LA TRANSMISIÓN"; fe8[27] = kmTransmision;
 
 
-      sheet.addRows([fe4, fe5, fe6, fe7, fe8]);
+      sheet.addRows([datosVehiculo, fe4, fe5, fe6, fe7, fe8]);
 
 
       // 4. Combinar Celdas y Aplicar Estilos
@@ -398,8 +402,9 @@ const InformeFormulario = () => {
       sheet.mergeCells('A86:AG86'); // DATOS DEL VEHICULO
       sheet.mergeCells('A87:B87'); sheet.mergeCells('G87:O87'); sheet.mergeCells('P87:R87'); sheet.mergeCells('S87:U87'); sheet.mergeCells('V87:X87'); sheet.mergeCells('Y87:AA87'); sheet.mergeCells('AB87:AD87'); sheet.mergeCells('AE87:AG87'); // SOAT
       sheet.mergeCells('A88:B88'); sheet.mergeCells('G88:O88'); sheet.mergeCells('P88:R88'); sheet.mergeCells('S88:U88'); sheet.mergeCells('V88:X88'); sheet.mergeCells('Y88:AA88'); sheet.mergeCells('AB88:AD88'); sheet.mergeCells('AE88:AG88'); // TECNOMECANICA
-      sheet.mergeCells('A89:D89'); sheet.mergeCells('E89:I89'); sheet.mergeCells('J89:AA89'); sheet.mergeCells('AB89:AG89');//KILOMETRAJE F1
-      sheet.mergeCells('A90:D90'); sheet.mergeCells('E90:I90'); sheet.mergeCells('J90:AA90'); sheet.mergeCells('AB90:AG90');//KILOMETRAJE F2
+      sheet.mergeCells('A89:B89'); sheet.mergeCells('G89:O89'); sheet.mergeCells('P89:R89'); sheet.mergeCells('S89:U89'); sheet.mergeCells('V89:X89'); sheet.mergeCells('Y89:AA89'); sheet.mergeCells('AB89:AD89'); sheet.mergeCells('AE89:AG89'); // POLIZA INDIVIDUAL
+      sheet.mergeCells('A90:D90'); sheet.mergeCells('E90:I90'); sheet.mergeCells('J90:AA90'); sheet.mergeCells('AB90:AG90');//KILOMETRAJE F1
+      sheet.mergeCells('A91:D91'); sheet.mergeCells('E91:I91'); sheet.mergeCells('J91:AA91'); sheet.mergeCells('AB91:AG91');//KILOMETRAJE F2
 
       // Asignar textos fijos solicitados
       sheet.getCell('A9').value = "FRENOS"; sheet.mergeCells('A9:A10');
@@ -424,14 +429,11 @@ const InformeFormulario = () => {
       sheet.getCell('A70').value = "IDENTIFICACIÓN"; sheet.mergeCells('A70:A73');
       sheet.getCell('A77').value = "HERRAMIENTAS DE APOYO"; sheet.mergeCells('A77:A80');
 
-      ['A9', 'A11', 'A14', 'A18', 'A23', 'A25', 'A36', 'A37', 'A40', 'A45', 'A47', 'A49', 'A52', 'A53', 'A57', 'A65', 'A67', 'A68', 'A69', 'A70', 'A77'].forEach(ref => {
-        const cell = sheet.getCell(ref);
-        cell.alignment = { wrapText: true, vertical: 'middle', horizontal: 'center' };
-      });
+
 
 
       // Aplicar bordes a todas las celdas desde A1 hasta AG90
-      for (let r = 1; r <= 90; r++) {
+      for (let r = 1; r <= 91; r++) {
         const row = sheet.getRow(r);
         for (let c = 1; c <= 33; c++) { // Columna 1 es A, 33 es AG
           const cell = row.getCell(c);
@@ -441,9 +443,15 @@ const InformeFormulario = () => {
             bottom: { style: 'thin' },
             right: { style: 'thin' }
           };
+          cell.alignment = { wrapText: true, vertical: 'middle' };
           cell.font = { ...(cell.font || {}), size: 8, bold: true };
         }
       }
+
+      ['A9', 'A11', 'A14', 'A18', 'A23', 'A25', 'A36', 'A37', 'A40', 'A43', 'A45', 'A47', 'A49', 'A52', 'A53', 'A57', 'A65', 'A67', 'A68', 'A69', 'A70', 'A77'].forEach(ref => {
+        const cell = sheet.getCell(ref);
+        cell.alignment = { wrapText: true, vertical: 'middle', horizontal: 'center' };
+      });
 
       const valuesRow = [
         {
@@ -481,8 +489,8 @@ const InformeFormulario = () => {
         }
       }
 
-      // Centrar toda la cuadrícula de días (Fila 7 a 90, Columnas C a AG)
-      for (let r = 7; r <= 88; r++) {
+      // Centrar toda la cuadrícula de días (Fila 7 a 89, Columnas C a AG)
+      for (let r = 7; r <= 89; r++) {
         const row = sheet.getRow(r);
         for (let c = 3; c <= 33; c++) { // Columna 3 es C, 33 es AG
           const cell = row.getCell(c);
@@ -491,34 +499,38 @@ const InformeFormulario = () => {
       }
 
       //FRIMAS
-      const frima1 = Array(33).fill("");
-      const frima2 = Array(33).fill("");
-      const frima3 = Array(33).fill("");
-      const frima4 = Array(33).fill(""); frima4[0] = "NOMBRES Y APELLIDOS"; frima4[16] = "NOMBRES Y APELLIDOS";
-      const frima5 = Array(33).fill(""); frima5[0] = "FIRMA DE ENTRAGA"; frima5[16] = "FIRMA DE RECIBIDO";
-      const frima6 = Array(33).fill("");
-      sheet.addRows([frima1, frima2, frima3, frima4, frima5, frima6]);
+      const esp = Array(33).fill("");
+      const frima0 = Array(33).fill(""); frima0[0] = conductor.toUpperCase();
+      const frima1 = Array(33).fill(""); frima1[0] = "NOMBRES Y APELLIDOS"; frima1[16] = "NOMBRES Y APELLIDOS";
+      const frima2 = Array(33).fill(""); frima2[0] = "FIRMA DE ENTRAGA"; frima2[16] = "FIRMA DE RECIBIDO";
+      sheet.addRows([esp, esp, frima0, frima1, frima2, esp]);
 
-      sheet.mergeCells('A93:G93'); sheet.mergeCells('Q93:AF93');
-      const thickBorder = { bottom: { style: 'thick' } };
-      for (let c = 1; c <= 7; c++) sheet.getRow(93).getCell(c).border = thickBorder;
-      for (let c = 17; c <= 32; c++) sheet.getRow(93).getCell(c).border = thickBorder;
       sheet.mergeCells('A94:G94'); sheet.mergeCells('Q94:AF94');
+      const thickBorder = { bottom: { style: 'thick' } };
+      for (let c = 1; c <= 7; c++) sheet.getRow(94).getCell(c).border = thickBorder;
+      for (let c = 17; c <= 32; c++) sheet.getRow(94).getCell(c).border = thickBorder;
       sheet.mergeCells('A95:G95'); sheet.mergeCells('Q95:AF95');
+      sheet.mergeCells('A96:G96'); sheet.mergeCells('Q96:AF96');
 
-      // Bordes externos para A91:AG96
-      for (let r = 91; r <= 96; r++) {
+      // Bordes externos para A92:AG97
+      for (let r = 92; r <= 97; r++) {
         for (let c = 1; c <= 33; c++) {
           const cell = sheet.getRow(r).getCell(c);
+          cell.font = { ...(cell.font || {}), size: 10, bold: true };
+          cell.alignment = { wrapText: true, vertical: 'middle' };
+
           let newBorder = { ...(cell.border || {}) };
-          
-          if (r === 91) newBorder.top = { style: 'thin' };
-          if (r === 96) newBorder.bottom = { style: 'thin' };
+
+          if (r === 92) newBorder.top = { style: 'thin' };
+          if (r === 97) newBorder.bottom = { style: 'thin' };
           if (c === 1) newBorder.left = { style: 'thin' };
           if (c === 33) newBorder.right = { style: 'thin' };
-          
-          if (r === 91 || r === 96 || c === 1 || c === 33) {
+
+          if (r === 92 || r === 97 || c === 1 || c === 33) {
             cell.border = newBorder;
+          }
+          if (r === 94) {
+            cell.font = { ...(cell.font || {}), size: 11 };
           }
         }
       }
