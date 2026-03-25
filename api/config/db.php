@@ -11,14 +11,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
 
-class Database {
+class Database
+{
     private $host = "localhost";
+    //private $db_name = "ambulanc_proyectar";
+    //private $username = "ambulanc_proyectar";
+    //private $password = "ambulanc_proyectar";
+
     private $db_name = "sistema_ambulancias";
-    private $username = "root"; // Ajustar si es necesario en XAMPP suele ser root sin contraseña
-    private $password = ""; 
+    private $username = "root";
+    private $password = "";
     public $conn;
 
-    public function getConnection() {
+    public function getConnection()
+    {
         $this->conn = null;
 
         try {
@@ -26,7 +32,8 @@ class Database {
             $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
             $this->conn->exec("set names utf8");
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch(PDOException $exception) {
+        }
+        catch (PDOException $exception) {
             // En producción, es recomendable registrar el error en un log y no mostrarlo directamente
             echo "Error de conexión: " . $exception->getMessage();
         }

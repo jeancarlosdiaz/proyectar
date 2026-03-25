@@ -20,7 +20,7 @@ import InformeFormulario from './pages/InformeFormulario';
 
 function App() {
   return (
-    <Router>
+    <Router basename={import.meta.env.DEV ? "/" : "/proyectar"}>
       <Routes>
         <Route path="/login" element={<Login />} />
         
