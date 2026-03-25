@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+import config from '../config';
 const QuickCreateTypeModal = ({ show, onHide, onSuccess }) => {
     const [nombre, setNombre] = useState('');
     const [loading, setLoading] = useState(false);
@@ -11,7 +12,7 @@ const QuickCreateTypeModal = ({ show, onHide, onSuccess }) => {
 
         setLoading(true);
         try {
-            const { data } = await axios.post('http://localhost/proyectar/api/tipos_equipos/create.php', 
+            const { data } = await axios.post(`${config.apiUrl}/tipos_equipos/create.php`, 
                 { nombre: nombre.trim() }, 
                 { withCredentials: true }
             );

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import FilePickerModal from '../components/FilePickerModal';
 
+import config from '../config';
 const Ambulancias = () => {
   const [ambulancias, setAmbulancias] = useState([]);
   const [sedes, setSedes] = useState([]); // Nuevo estado para sedes
@@ -24,11 +25,11 @@ const Ambulancias = () => {
   const fetchAmbulancias = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get('http://localhost/proyectar/api/ambulancias/read.php', { withCredentials: true });
+      const { data } = await axios.get(`${config.apiUrl}/ambulancias/read.php`, { withCredentials: true });
       setAmbulancias(Array.isArray(data) ? data : []);
       
       // También cargar las sedes para el selector
-      const resSedes = await axios.get('http://localhost/proyectar/api/sedes/read.php', { withCredentials: true });
+      const resSedes = await axios.get(`${config.apiUrl}/sedes/read.php`, { withCredentials: true });
       setSedes(Array.isArray(resSedes.data) ? resSedes.data : []);
     } catch (error) {
       console.error(error);
@@ -56,7 +57,7 @@ const Ambulancias = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Eliminar esta ambulancia?')) {
       try {
-        await axios.post('http://localhost/proyectar/api/ambulancias/delete.php', { id }, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/ambulancias/delete.php`, { id }, { withCredentials: true });
         fetchAmbulancias();
       } catch (error) {
         alert('Error al eliminar');
@@ -69,10 +70,10 @@ const Ambulancias = () => {
     try {
       if (formData.id) {
         // Actualizar
-        await axios.post('http://localhost/proyectar/api/ambulancias/update.php', formData, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/ambulancias/update.php`, formData, { withCredentials: true });
       } else {
         // Crear
-        await axios.post('http://localhost/proyectar/api/ambulancias/create.php', formData, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/ambulancias/create.php`, formData, { withCredentials: true });
       }
       setVista('lista');
       setFormData({ 

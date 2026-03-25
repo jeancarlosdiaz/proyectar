@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+import config from '../config';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,7 +17,7 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost/proyectar/api/auth/login.php', {
+      const response = await axios.post(`${config.apiUrl}/auth/login.php`, {
         email,
         password
       }, {

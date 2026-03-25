@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import config from '../config';
 const FilePickerModal = ({ show, onHide, onSelect, title = "Seleccionar Archivo", multiple = false, selectedPaths = "" }) => {
   const [archivos, setArchivos] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -29,7 +30,7 @@ const FilePickerModal = ({ show, onHide, onSelect, title = "Seleccionar Archivo"
   const fetchArchivos = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get('http://localhost/proyectar/api/archivos/read.php', { withCredentials: true });
+      const { data } = await axios.get(`${config.apiUrl}/archivos/read.php`, { withCredentials: true });
       setArchivos(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error al cargar archivos", error);

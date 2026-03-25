@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import config from '../config';
 const Dashboard = () => {
   const [data, setData] = useState({
     total_ambulancias: 0,
@@ -14,7 +15,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const { data } = await axios.get('http://localhost/proyectar/api/dashboard/summary.php', { withCredentials: true });
+        const { data } = await axios.get(`${config.apiUrl}/dashboard/summary.php`, { withCredentials: true });
         setData(data);
       } catch (error) {
         console.error('Error al cargar resumen', error);

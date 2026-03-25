@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import config from '../config';
 const InformeFormulario = () => {
   const [data, setData] = useState([]);
   const [headers, setHeaders] = useState([]);
@@ -51,7 +52,7 @@ const InformeFormulario = () => {
       const endDate = formatDate(ultimoDia);
 
       // Hacemos la petición al nuevo endpoint de reportes externos
-      const response = await axios.get('http://localhost/proyectar/api/reportes_externos/read_sheets.php', {
+      const response = await axios.get(`${config.apiUrl}/reportes_externos/read_sheets.php`, {
         params: { start_date: startDate, end_date: endDate },
         withCredentials: true
       });

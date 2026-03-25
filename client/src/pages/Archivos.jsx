@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import config from '../config';
 const Archivos = () => {
     const [archivos, setArchivos] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -15,7 +16,7 @@ const Archivos = () => {
     const fetchArchivos = async () => {
         setLoading(true);
         try {
-            const { data } = await axios.get('http://localhost/proyectar/api/archivos/read.php', { withCredentials: true });
+            const { data } = await axios.get(`${config.apiUrl}/archivos/read.php`, { withCredentials: true });
             setArchivos(Array.isArray(data) ? data : []);
         } catch (err) {
             console.error(err);
@@ -41,7 +42,7 @@ const Archivos = () => {
         }
 
         try {
-            await axios.post('http://localhost/proyectar/api/archivos/upload.php', formData, {
+            await axios.post(`${config.apiUrl}/archivos/upload.php`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 withCredentials: true
             });
@@ -57,7 +58,7 @@ const Archivos = () => {
     const handleDelete = async (id) => {
         if (window.confirm('¿Estás seguro de eliminar este archivo permanentemente?')) {
             try {
-                await axios.post('http://localhost/proyectar/api/archivos/delete.php', { id }, { withCredentials: true });
+                await axios.post(`${config.apiUrl}/archivos/delete.php`, { id }, { withCredentials: true });
                 fetchArchivos();
             } catch (err) {
                 alert('No se pudo eliminar el archivo');

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import FilePickerModal from '../components/FilePickerModal';
 
+import config from '../config';
 const EquipoHojaVidaV2 = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ const EquipoHojaVidaV2 = () => {
 
     const fetchCalibraciones = async () => {
         try {
-            const resCal = await axios.get(`http://localhost/proyectar/api/calibraciones/read.php?equipo_id=${id}`, { withCredentials: true });
+            const resCal = await axios.get(`${config.apiUrl}/calibraciones/read.php?equipo_id=${id}`, { withCredentials: true });
             setCalibraciones(Array.isArray(resCal.data) ? resCal.data : []);
         } catch (error) {
             console.error("Error cargando calibraciones", error);
@@ -40,7 +41,7 @@ const EquipoHojaVidaV2 = () => {
 
     const fetchMantenimientos = async () => {
         try {
-            const res = await axios.get(`http://localhost/proyectar/api/mantenimientos/read.php?equipo_id=${id}`, { withCredentials: true });
+            const res = await axios.get(`${config.apiUrl}/mantenimientos/read.php?equipo_id=${id}`, { withCredentials: true });
             setMantenimientos(Array.isArray(res.data) ? res.data : []);
         } catch (error) {
             console.error("Error cargando mantenimientos", error);
@@ -52,7 +53,7 @@ const EquipoHojaVidaV2 = () => {
             setLoading(true);
             try {
                 // Obtener info del equipo
-                const resEq = await axios.get(`http://localhost/proyectar/api/equipos/read.php?id=${id}`, { withCredentials: true });
+                const resEq = await axios.get(`${config.apiUrl}/equipos/read.php?id=${id}`, { withCredentials: true });
                 setDetalle(resEq.data);
 
                 // Setear periodicidad por defecto del equipo
@@ -75,7 +76,7 @@ const EquipoHojaVidaV2 = () => {
     const handleCalibSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost/proyectar/api/calibraciones/create.php', {
+            await axios.post(`${config.apiUrl}/calibraciones/create.php`, {
                 equipo_id: id,
                 ...calibData,
                 periodicidad_meses: detalle?.periodicidad_meses || 6
@@ -103,7 +104,7 @@ const EquipoHojaVidaV2 = () => {
         if (!window.confirm('¿Estás seguro de eliminar este registro de calibración? Esta acción no se puede deshacer.')) return;
         
         try {
-            await axios.post('http://localhost/proyectar/api/calibraciones/delete.php', { id: calibId }, { withCredentials: true });
+            await axios.post(`${config.apiUrl}/calibraciones/delete.php`, { id: calibId }, { withCredentials: true });
             fetchCalibraciones();
         } catch (error) {
             alert('Error eliminando calibración: ' + (error.response?.data?.message || error.message));
@@ -113,7 +114,7 @@ const EquipoHojaVidaV2 = () => {
     const handleMantSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost/proyectar/api/mantenimientos/create.php', {
+            await axios.post(`${config.apiUrl}/mantenimientos/create.php`, {
                 equipo_id: id,
                 ...mantData
             }, { withCredentials: true });
@@ -133,7 +134,7 @@ const EquipoHojaVidaV2 = () => {
     const handleDeleteMant = async (mantId) => {
         if (!window.confirm('¿Estás seguro de eliminar este registro de mantenimiento? Esta acción no se puede deshacer.')) return;
         try {
-            await axios.post('http://localhost/proyectar/api/mantenimientos/delete.php', { id: mantId }, { withCredentials: true });
+            await axios.post(`${config.apiUrl}/mantenimientos/delete.php`, { id: mantId }, { withCredentials: true });
             fetchMantenimientos();
         } catch (error) {
             alert('Error eliminando mantenimiento: ' + (error.response?.data?.message || error.message));

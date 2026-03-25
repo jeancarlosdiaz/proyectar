@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import config from '../config';
 const TiposEquipos = () => {
   const [tipos, setTipos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +14,7 @@ const TiposEquipos = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost/proyectar/api/tipos_equipos/read.php', { withCredentials: true });
+      const res = await axios.get(`${config.apiUrl}/tipos_equipos/read.php`, { withCredentials: true });
       setTipos(Array.isArray(res.data) ? res.data : []);
     } catch (error) {
       console.error(error);
@@ -30,9 +31,9 @@ const TiposEquipos = () => {
     e.preventDefault();
     try {
       if (editando) {
-        await axios.post('http://localhost/proyectar/api/tipos_equipos/update.php', formTipo, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/tipos_equipos/update.php`, formTipo, { withCredentials: true });
       } else {
-        await axios.post('http://localhost/proyectar/api/tipos_equipos/create.php', formTipo, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/tipos_equipos/create.php`, formTipo, { withCredentials: true });
       }
       setFormTipo({ id: '', nombre: '' });
       setEditando(false);
@@ -50,7 +51,7 @@ const TiposEquipos = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Eliminar este tipo de equipo? No puede tener equipos asociados.')) {
       try {
-        await axios.post('http://localhost/proyectar/api/tipos_equipos/delete.php', { id }, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/tipos_equipos/delete.php`, { id }, { withCredentials: true });
         fetchData();
       } catch (error) {
         alert(error.response?.data?.message || 'Error al eliminar el tipo de equipo');

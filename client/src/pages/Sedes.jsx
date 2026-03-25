@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import config from '../config';
 const Sedes = () => {
   const [sedes, setSedes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +14,7 @@ const Sedes = () => {
   const fetchSedes = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get('http://localhost/proyectar/api/sedes/read.php', { withCredentials: true });
+      const { data } = await axios.get(`${config.apiUrl}/sedes/read.php`, { withCredentials: true });
       setSedes(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error(error);
@@ -30,9 +31,9 @@ const Sedes = () => {
     e.preventDefault();
     try {
       if (editando) {
-        await axios.post('http://localhost/proyectar/api/sedes/update.php', formSede, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/sedes/update.php`, formSede, { withCredentials: true });
       } else {
-        await axios.post('http://localhost/proyectar/api/sedes/create.php', formSede, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/sedes/create.php`, formSede, { withCredentials: true });
       }
       setFormSede({ id: '', nombre: '', ciudad: '' });
       setEditando(false);
@@ -50,7 +51,7 @@ const Sedes = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Eliminar esta sede? Las ambulancias asociadas quedarán sin sede.')) {
       try {
-        await axios.post('http://localhost/proyectar/api/sedes/delete.php', { id }, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/sedes/delete.php`, { id }, { withCredentials: true });
         fetchSedes();
       } catch (error) {
         alert('Error al eliminar la sede');

@@ -5,6 +5,7 @@ import FilePickerModal from '../components/FilePickerModal';
 import QuickCreateTypeModal from '../components/QuickCreateTypeModal';
 
 
+import config from '../config';
 const Equipos = () => {
   const [equipos, setEquipos] = useState([]);
   const [ambulancias, setAmbulancias] = useState([]); 
@@ -39,7 +40,7 @@ const Equipos = () => {
 
   const fetchTipos = async () => {
     try {
-      const { data } = await axios.get('http://localhost/proyectar/api/tipos_equipos/read.php', { withCredentials: true });
+      const { data } = await axios.get(`${config.apiUrl}/tipos_equipos/read.php`, { withCredentials: true });
       setTipos(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error cargando tipos", error);
@@ -49,15 +50,15 @@ const Equipos = () => {
   const fetchEquipos = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get('http://localhost/proyectar/api/equipos/read.php', { withCredentials: true });
+      const { data } = await axios.get(`${config.apiUrl}/equipos/read.php`, { withCredentials: true });
       setEquipos(Array.isArray(data) ? data : []);
       
       // Cargar ambulancias
-      const resAmb = await axios.get('http://localhost/proyectar/api/ambulancias/read.php', { withCredentials: true });
+      const resAmb = await axios.get(`${config.apiUrl}/ambulancias/read.php`, { withCredentials: true });
       setAmbulancias(Array.isArray(resAmb.data) ? resAmb.data : []);
 
       // Cargar departamentos
-      const resDep = await axios.get('http://localhost/proyectar/api/departamentos/read.php', { withCredentials: true });
+      const resDep = await axios.get(`${config.apiUrl}/departamentos/read.php`, { withCredentials: true });
       setDepartamentos(Array.isArray(resDep.data) ? resDep.data : []);
 
       // Cargar tipos
@@ -72,7 +73,7 @@ const Equipos = () => {
 
   const fetchCalibraciones = async (equipo_id) => {
     try {
-      const { data } = await axios.get(`http://localhost/proyectar/api/calibraciones/read.php?equipo_id=${equipo_id}`, { withCredentials: true });
+      const { data } = await axios.get(`${config.apiUrl}/calibraciones/read.php?equipo_id=${equipo_id}`, { withCredentials: true });
       setCalibraciones(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error cargando calibraciones", error);
@@ -99,7 +100,7 @@ const Equipos = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Eliminar este equipo y todo su historial de calibraciones?')) {
       try {
-        await axios.post('http://localhost/proyectar/api/equipos/delete.php', { id }, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/equipos/delete.php`, { id }, { withCredentials: true });
         fetchEquipos();
       } catch (error) {
         alert('Error al eliminar el equipo');
@@ -111,9 +112,9 @@ const Equipos = () => {
     e.preventDefault();
     try {
       if (equipoActual.id) {
-        await axios.post('http://localhost/proyectar/api/equipos/update.php', equipoActual, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/equipos/update.php`, equipoActual, { withCredentials: true });
       } else {
-        await axios.post('http://localhost/proyectar/api/equipos/create.php', equipoActual, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/equipos/create.php`, equipoActual, { withCredentials: true });
       }
       setVista('lista');
       fetchEquipos();
@@ -125,7 +126,7 @@ const Equipos = () => {
   const handleCalibSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost/proyectar/api/calibraciones/create.php', {
+      await axios.post(`${config.apiUrl}/calibraciones/create.php`, {
         equipo_id: equipoActual.id,
         ...calibData
       }, { withCredentials: true });

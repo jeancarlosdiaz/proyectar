@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+import config from '../config';
 const AmbulanciaDetalleV2 = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -13,7 +14,7 @@ const AmbulanciaDetalleV2 = () => {
         setDownloadingZip(true);
         try {
             const response = await axios.get(
-                `http://localhost/proyectar/api/ambulancias/export_zip.php?id=${id}&t=${Date.now()}`,
+                `${config.apiUrl}/ambulancias/export_zip.php?id=${id}&t=${Date.now()}`,
                 { withCredentials: true, responseType: 'blob' }
             );
             const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/zip' }));
@@ -41,7 +42,7 @@ const AmbulanciaDetalleV2 = () => {
     useEffect(() => {
         const fetchDetalle = async () => {
             try {
-                const { data } = await axios.get(`http://localhost/proyectar/api/ambulancias/get_details.php?id=${id}`, { withCredentials: true });
+                const { data } = await axios.get(`${config.apiUrl}/ambulancias/get_details.php?id=${id}`, { withCredentials: true });
                 setDetalle(data);
             } catch (error) {
                 console.error('Error al cargar detalles', error);

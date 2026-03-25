@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import config from '../config';
 const Departamentos = () => {
   const [departamentos, setDepartamentos] = useState([]);
   const [sedes, setSedes] = useState([]);
@@ -15,10 +16,10 @@ const Departamentos = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const resDeptos = await axios.get('http://localhost/proyectar/api/departamentos/read.php', { withCredentials: true });
+      const resDeptos = await axios.get(`${config.apiUrl}/departamentos/read.php`, { withCredentials: true });
       setDepartamentos(Array.isArray(resDeptos.data) ? resDeptos.data : []);
       
-      const resSedes = await axios.get('http://localhost/proyectar/api/sedes/read.php', { withCredentials: true });
+      const resSedes = await axios.get(`${config.apiUrl}/sedes/read.php`, { withCredentials: true });
       setSedes(Array.isArray(resSedes.data) ? resSedes.data : []);
     } catch (error) {
       console.error(error);
@@ -35,9 +36,9 @@ const Departamentos = () => {
     e.preventDefault();
     try {
       if (editando) {
-        await axios.post('http://localhost/proyectar/api/departamentos/update.php', formDepto, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/departamentos/update.php`, formDepto, { withCredentials: true });
       } else {
-        await axios.post('http://localhost/proyectar/api/departamentos/create.php', formDepto, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/departamentos/create.php`, formDepto, { withCredentials: true });
       }
       setFormDepto({ id: '', nombre: '', sede_id: '' });
       setEditando(false);
@@ -51,7 +52,7 @@ const Departamentos = () => {
     setDownloadingZip(id);
     try {
         const response = await axios.get(
-            `http://localhost/proyectar/api/departamentos/export_zip.php?id=${id}&t=${Date.now()}`,
+            `${config.apiUrl}/departamentos/export_zip.php?id=${id}&t=${Date.now()}`,
             { withCredentials: true, responseType: 'blob' }
         );
         const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/zip' }));
@@ -84,7 +85,7 @@ const Departamentos = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Eliminar este departamento? Los equipos asociados quedarán sin departamento.')) {
       try {
-        await axios.post('http://localhost/proyectar/api/departamentos/delete.php', { id }, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/departamentos/delete.php`, { id }, { withCredentials: true });
         fetchData();
       } catch (error) {
         alert('Error al eliminar el departamento');

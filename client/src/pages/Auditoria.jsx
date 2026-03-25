@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import config from '../config';
 const Auditoria = () => {
   const [registros, setRegistros] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchAuditoria = async () => {
     try {
-      const { data } = await axios.get('http://localhost/proyectar/api/auditoria/read.php', { withCredentials: true });
+      const { data } = await axios.get(`${config.apiUrl}/auditoria/read.php`, { withCredentials: true });
       setRegistros(Array.isArray(data) ? data : []);
     } catch (error) {
       if (error.response && error.response.status === 403) {

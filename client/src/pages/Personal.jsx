@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import config from '../config';
 const Personal = () => {
   const [personal, setPersonal] = useState([]);
   const [ambulancias, setAmbulancias] = useState([]);
@@ -15,8 +16,8 @@ const Personal = () => {
     setLoading(true);
     try {
       const [resPersonal, resAmbulancias] = await Promise.all([
-        axios.get('http://localhost/proyectar/api/personal/read.php', { withCredentials: true }),
-        axios.get('http://localhost/proyectar/api/ambulancias/read.php', { withCredentials: true })
+        axios.get(`${config.apiUrl}/personal/read.php`, { withCredentials: true }),
+        axios.get(`${config.apiUrl}/ambulancias/read.php`, { withCredentials: true })
       ]);
       setPersonal(Array.isArray(resPersonal.data) ? resPersonal.data : []);
       setAmbulancias(Array.isArray(resAmbulancias.data) ? resAmbulancias.data : []);
@@ -47,7 +48,7 @@ const Personal = () => {
   const handleDelete = async (id) => {
     if (window.confirm('¿Eliminar registro de personal?')) {
       try {
-        await axios.post('http://localhost/proyectar/api/personal/delete.php', { id }, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/personal/delete.php`, { id }, { withCredentials: true });
         fetchData();
       } catch (error) {
         alert('Error al eliminar');
@@ -60,10 +61,10 @@ const Personal = () => {
     try {
       if (formData.id) {
         // Actualizar
-        await axios.post('http://localhost/proyectar/api/personal/update.php', formData, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/personal/update.php`, formData, { withCredentials: true });
       } else {
         // Crear
-        await axios.post('http://localhost/proyectar/api/personal/create.php', formData, { withCredentials: true });
+        await axios.post(`${config.apiUrl}/personal/create.php`, formData, { withCredentials: true });
       }
       setShowForm(false);
       setFormData({ id: '', nombre: '', tipo_identificacion: 'CC', identificacion: '', cargo: '', ambulancia_id: '', estado: 'Activo' });

@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet, useNavigate, Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
+import config from '../config';
 const Layout = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -9,7 +10,7 @@ const Layout = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost/proyectar/api/auth/logout.php', {}, { withCredentials: true });
+      await axios.post(`${config.apiUrl}/auth/logout.php`, {}, { withCredentials: true });
     } catch (err) {
       console.error(err);
     } finally {

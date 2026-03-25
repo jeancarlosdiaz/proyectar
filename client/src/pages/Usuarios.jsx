@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import config from '../config';
 const Usuarios = () => {
     const [usuarios, setUsuarios] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -36,7 +37,7 @@ const Usuarios = () => {
     const fetchUsuarios = async () => {
         setLoading(true);
         try {
-            const { data } = await axios.get('http://localhost/proyectar/api/usuarios/read.php', { withCredentials: true });
+            const { data } = await axios.get(`${config.apiUrl}/usuarios/read.php`, { withCredentials: true });
             setUsuarios(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error("Error cargando usuarios", error);
@@ -59,9 +60,9 @@ const Usuarios = () => {
         e.preventDefault();
         try {
             if (usuarioActual.id) {
-                await axios.post('http://localhost/proyectar/api/usuarios/update.php', usuarioActual, { withCredentials: true });
+                await axios.post(`${config.apiUrl}/usuarios/update.php`, usuarioActual, { withCredentials: true });
             } else {
-                await axios.post('http://localhost/proyectar/api/usuarios/create.php', usuarioActual, { withCredentials: true });
+                await axios.post(`${config.apiUrl}/usuarios/create.php`, usuarioActual, { withCredentials: true });
             }
             setVista('lista');
             fetchUsuarios();
@@ -72,7 +73,7 @@ const Usuarios = () => {
 
     const handleEdit = (user) => {
         // Cargar permisos completos del usuario
-        axios.get(`http://localhost/proyectar/api/usuarios/read.php?id=${user.id}`, { withCredentials: true })
+        axios.get(`${config.apiUrl}/usuarios/read.php?id=${user.id}`, { withCredentials: true })
             .then(({ data }) => {
                 setUsuarioActual({
                     ...data,
@@ -86,7 +87,7 @@ const Usuarios = () => {
     const handleDelete = async (id) => {
         if (window.confirm('¿Estás seguro de eliminar este usuario?')) {
             try {
-                await axios.post('http://localhost/proyectar/api/usuarios/delete.php', { id }, { withCredentials: true });
+                await axios.post(`${config.apiUrl}/usuarios/delete.php`, { id }, { withCredentials: true });
                 fetchUsuarios();
             } catch (error) {
                 alert(error.response?.data?.message || 'Error al eliminar usuario');
