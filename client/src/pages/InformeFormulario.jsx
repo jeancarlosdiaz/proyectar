@@ -114,6 +114,20 @@ const InformeFormulario = () => {
       const sheetRows = groupedData[sheetName];
       const sheet = workbook.addWorksheet(sheetName);
 
+      // --- CONFIGURACIÓN DE IMPRESIÓN ---
+      sheet.pageSetup.orientation = 'landscape'; // Orientación horizontal
+      sheet.pageSetup.paperSize = 1; // 1 = Tamaño Carta (Letter)
+      sheet.pageSetup.fitToPage = true; // Activar auto-ajuste
+      sheet.pageSetup.fitToWidth = 1; // Ajustar a 1 página de ancho
+      sheet.pageSetup.fitToHeight = 0; // 0 = Múltiples páginas de alto si se requiere (sólo ajusta ancho)
+      sheet.pageSetup.margins = {
+        left: 0.7, right: 0.7,    // 1.78 cm aprox 0.7 pulgadas
+        top: 0.75, bottom: 0.75,  // 1.91 cm aprox 0.75 pulgadas
+        header: 0.3, footer: 0.3  // 0.76 cm aprox 0.3 pulgadas
+      };
+      sheet.pageSetup.printArea = 'A1:AG97'; // Área de impresión definida
+      sheet.pageSetup.horizontalCentered = true; // Centrar horizontalmente en la página
+
       // 1. Configurar anchos de columna
       sheet.columns = [
         { width: 12.7 }, // A (~89px)
