@@ -38,7 +38,14 @@ function App() {
           <Route path="/usuarios" element={<Usuarios />} />
           <Route path="/ambulancia-detalle/:id" element={<AmbulanciaDetalleV2 />} />
           <Route path="/equipo-hoja-vida/:id" element={<EquipoHojaVidaV2 />} />
-          <Route path="/informe-formulario" element={<InformeFormulario />} />
+          <Route 
+            path="/informe-formulario" 
+            element={
+              JSON.parse(localStorage.getItem('user'))?.rol === 'admin' 
+                ? <InformeFormulario /> 
+                : <Navigate to="/dashboard" replace />
+            } 
+          />
         </Route>
 
 
