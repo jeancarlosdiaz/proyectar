@@ -116,7 +116,8 @@ const InformeFormulario = () => {
       const sheet = workbook.addWorksheet(sheetName);
 
       // --- CONFIGURACIÓN DE IMPRESIÓN ---
-      sheet.pageSetup.orientation = 'landscape'; // Orientación horizontal
+      sheet.pageSetup.orientation = 'portrait'; // Orientación vertical
+      //sheet.pageSetup.orientation = 'landscape'; // Orientación horizontal
       sheet.pageSetup.paperSize = 1; // 1 = Tamaño Carta (Letter)
       sheet.pageSetup.fitToPage = true; // Activar auto-ajuste
       sheet.pageSetup.fitToWidth = 1; // Ajustar a 1 página de ancho
